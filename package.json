@@ -1,5 +1,5 @@
 {
-  "name": "Doc-Appoinment-system",
+  "name":"Book-a-Ride",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -11,8 +11,8 @@
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "author": "techinfyt ",
-  "license": "MIT",
+  "author": "",
+  "license": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
