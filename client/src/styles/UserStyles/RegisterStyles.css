@@ -1,0 +1,17 @@
+
+.form-container{
+  /* background-image: url("https://images.pexels.com/photos/1534604/pexels-photo-1534604.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"); */
+  display: flex;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  justify-content: center;
+  image-resolution: 1440px;
+}
+.registerform{
+  border: 1px  solid;
+  padding: 30px;
+  width:30%;
+
+}
