@@ -1,12 +1,16 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "../../../styles/UserStyles/header.css";
-import { Button, Dropdown } from "antd";
+import { Button } from "antd";
+import { Menu, Dropdown } from 'antd';
+import { Select } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+
 
 const navLinks = [
   {
-    path: "/home",
+    path: "/",
     display: "Home",
   },
   {
@@ -18,6 +22,11 @@ const navLinks = [
     display: "Cars",
   },
 
+  // {
+  //   path: "/messenger",
+  //   display: "Message",
+  // },
+
   {
     path: "/blogs",
     display: "Blog",
@@ -28,9 +37,24 @@ const navLinks = [
   },
 ];
 
+
+
+const { Option } = Select;
+
 const Header = () => {
-  const User =JSON.parse(localStorage.getItem("User"))
   const navigate = useNavigate();
+  const { name } = useParams();
+  const [selectedCountry, setSelectedCountry] = useState("choose country");
+
+  function handleCountryChange(value) {
+    console.log("nam",name)
+    setSelectedCountry(value);
+    navigate(`/${value.toLowerCase()}`);
+  }
+
+  const User =localStorage.getItem("User") ? JSON.parse(localStorage.getItem("User")) : null
+  // const userInfo =  localStorage.getItem("User") ? JSON.parse(localStorage.getItem("User")) : " "
+
 
 const login=()=>{
   navigate("/login");
@@ -48,23 +72,23 @@ const login=()=>{
     {
       key: "1",
       label: (
-        <a
-        
-          href="https://www.antgroup.com"
-        >
-          Bookings
-        </a>
+        <Link to='/userbookings'>
+
+Bookings
+
+
+        </Link>
+       
       ),
     },
     {
       key: "2",
       label: (
-        <a
-      
-          href="https://www.aliyun.com"
-        >
-          Profile
-        </a>
+        <Link to='/profile'>
+        
+        Profile
+        </Link>
+        
       ),
     },
     {
@@ -96,20 +120,7 @@ const login=()=>{
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                {/* <Link to="#" className=" d-flex align-items-center gap-1">
-                  <i class="ri-login-circle-line"></i> Login
-                </Link>
-
-                <Link to="#" className=" d-flex align-items-center gap-1">
-                  <i class="ri-user-line"></i> Register
-                </Link> */}
-                {/* <button
-                  onClick={logout}
-                  style={{ backgroundColor: "black", color: "white" }}
-                  className=" d-flex align-items-center gap-1"
-                >
-                  <i class="ri-user-line"></i> Logout
-                </button>  */}
+               
            
 
             {User ? (
@@ -133,7 +144,7 @@ const login=()=>{
             <Col lg="4" md="3" sm="4">
               <div className="logo">
                 <h1>
-                  <Link to="/home" className=" d-flex align-items-center gap-2">
+                  <Link to="/" className=" d-flex align-items-center gap-2">
                     {/* <i class="ri-car-line"></i> */}
                     <span>
                       Dream Ride <br /> Rentals
@@ -143,17 +154,61 @@ const login=()=>{
               </div>
             </Col>
 
-            <Col lg="3" md="3" sm="4">
-              <div className="header__location d-flex align-items-center gap-2">
-                <span>
-                  <i class="ri-earth-line"></i>
-                </span>
-                <div className="header__location-content">
-                  <h4>India</h4>
-                  <h6>Trivandrum, Kerala</h6>
-                </div>
-              </div>
-            </Col>
+    
+
+{/* <Col lg={3} md={3} sm={4}>
+      <div className="header__location d-flex align-items-center gap-2">
+      <span>
+          <i class="ri-earth-line"></i>
+        </span>
+        <div className="header__location-content">
+          <h4 className="header__location-content">
+            <span>{selectedCountry}</span>
+          </h4>
+          <h6 className="location-selector__subtitle">
+            <span className="location-selector__dropdown">
+              <select
+                value={selectedCountry}
+                onChange={handleCountryChange}
+                className="form-select location-selector__select"
+              >
+                <option value="India">India</option>
+                <option value="USA">USA</option>
+                <option value="UK">UK</option>
+                <option value="Canada">Canada</option>
+              </select>
+            </span>
+          </h6>
+        </div>
+      </div>
+    </Col> */}
+
+
+<Col lg={3} md={3} sm={4}>
+      <div className="header__location d-flex align-items-center gap-2">
+        <span>
+          <i className="ri-earth-line"></i>
+        </span>
+        <div className="header__location-content">
+          <h4 className="header__location-content">
+            <span>{selectedCountry}</span>
+          </h4>
+          <h6 className="location-selector__subtitle">
+            <span className="location-selector__dropdown">
+            <Select value={selectedCountry} onChange={handleCountryChange}>
+      <Option value="USA">USA</Option>
+      <Option value="UK">UK</Option>
+      <Option value="Canada">Canada</Option>
+    </Select>
+            </span>
+          </h6>
+        </div>
+      </div>
+    </Col>
+
+ 
+
+
 
             <Col lg="3" md="3" sm="4">
               <div className="header__location d-flex align-items-center gap-2">
@@ -173,11 +228,13 @@ const login=()=>{
               sm="0"
               className=" d-flex align-items-center justify-content-end "
             >
-              <button className="header__btn btn ">
-                <Link to="/contact">
+              <Link to="/contact">
+              <div className="header__btn btn ">
+                
                   <i class="ri-phone-line"></i> Request a call
-                </Link>
-              </button>
+              </div>
+              </Link>
+
             </Col>
           </Row>
         </Container>

@@ -32,6 +32,8 @@ const CarDetails = () => {
   const [totalHours, setTotalHours] = useState(0);
   const [driver, setDriver] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [dateRange, setDateRange] = useState([]);
+
   const navigate = useNavigate()
   useEffect(() => {
     if (cars.length == 0) {
@@ -57,6 +59,8 @@ const CarDetails = () => {
     setFrom(values[0].format("MMM DD YYYY HH:mm"));
     setTo(values[1].format("MMM DD YYYY HH:mm"));
     setTotalHours(values[1].diff(values[0], "hours"));
+    setDateRange(values);
+
   }
   function bookNow() {
     const reqObj = {
@@ -92,6 +96,48 @@ const CarDetails = () => {
     navigate('/userbookings')
 
   }
+
+  function handleReserveNowClick() {
+    const selectedPaymentMethod = document.querySelector('input[type="radio"]:checked');
+  
+    if (selectedPaymentMethod.value === "pay-after-ride") {
+      // Code to handle Pay After Ride option
+      bookNow();
+
+      console.log("Pay After Ride selected");
+    } else if (selectedPaymentMethod.value === "cheque-payment") {
+      // Code to handle Cheque Payment option
+      console.log("Cheque Payment selected");
+
+
+
+    } else if (selectedPaymentMethod.value === "paypal") {
+      // Code to handle Paypal option
+      console.log("Paypal selected");
+      // Call the bookNow function that you have in your code snippet
+    } else {
+      console.log("Please select a payment method");
+    }
+  }
+
+
+  function paywithstripe(){
+    <StripeCheckout
+    shippingAddress
+    token={onToken}
+    amount={totalAmount * 100}
+    stripeKey="pk_test_51MecxESI2ynGCKECkwE6v1yAnK7Kpg47SvO2KIkNoslBDn09QKUMnMC3i8wASJH8Ob0Rb1di1ejeym0o2QTEcvpM00aLc6BcaX"
+  >
+  </StripeCheckout>
+  }
+
+  function disabledDate(current) {
+    // can't select days before today
+    return current && current < new Date(Date.now() - 86400000); // 86400000 is the number of milliseconds in a day
+  }
+
+
+
 
   return (
     <>
@@ -200,13 +246,16 @@ const CarDetails = () => {
               <div className="booking-info mt-5">
                 <h5 className="mb-4 fw-bold ">Booking Information</h5>
                 <h5 className="mb-4 p-3 fw-bold ">Select-time slots</h5>
+                
                 <RangePicker
                   style={rangePickerStyle}
-                  className=" mx-4 mb-4 p-5 fw-bold"
+                  className="ml-3 mx-4 mb-4 p-5 fw-bold"
                   showTime={{ format: "HH:mm" }}
                   format="MMM DD YYYY HH:mm"
                   onChange={selectTimeSlots}
-                />
+                  disabledDate={disabledDate} // add disabledDate prop
+
+                 />
                 <h5 className=" p-3 fw-bold ">Total hours:{totalHours}</h5>
                 <Checkbox
                   className="p-3 fw-bold"
@@ -220,45 +269,78 @@ const CarDetails = () => {
                 >
                   Driver Required
                 </Checkbox>
+
+
+
                 {/* <BookingForm /> */}
                 <h4 className=" p-3 fw-bold ">Total Amount:{totalAmount?totalAmount:"0"}</h4>
               </div>
             </Col>
+                {dateRange.length > 0 && (
+        <Col lg="5" className="mt-5">
+        <div className="payment__info mt-5">
+          <h5 className="mb-4 m-4 fw-bold p-5  ">Payment Information</h5>
+          {/* <PaymentMethod /> */}
+          <div className="payment">
 
-            <Col lg="5" className="mt-5">
-              <div className="payment__info mt-5">
-                <h5 className="mb-4 m-4 fw-bold p-5  ">Payment Information</h5>
-                {/* <PaymentMethod /> */}
-                <div className="payment">
-                  <label htmlFor="" className="d-flex align-items-center gap-2">
-                    <input type="radio"  onDoubleClick={bookNow}/> pay After Ride
-                  </label>
-                </div>
+          <StripeCheckout
+shippingAddress
+token={onToken}
+amount={totalAmount * 100}
+stripeKey="pk_test_51MecxESI2ynGCKECkwE6v1yAnK7Kpg47SvO2KIkNoslBDn09QKUMnMC3i8wASJH8Ob0Rb1di1ejeym0o2QTEcvpM00aLc6BcaX"
+>
+</StripeCheckout>
 
-                <div className="payment mt-3">
-                  <label htmlFor="" className="d-flex align-items-center gap-2">
-                    <input type="radio" /> Cheque Payment
-                  </label>
-                </div>
+<label htmlFor="" className="d-flex align-items-center mt-3 gap-2">
+<input type="radio" value="pay-after-ride" name="payment-method" /> Pay After Ride
+</label>
+</div>
 
-                <div className="payment mt-3 d-flex align-items-center justify-content-between">
-                  <label htmlFor="" className="d-flex align-items-center gap-2">
-                    <input type="radio" /> Paypal
-                    <button onClick={bookNow}></button>
-                  </label>
-                </div>
-                <div className="payment text-center mt-5">
-                  <StripeCheckout
-                    shippingAddress
-                    token={onToken}
-                    amount={totalAmount * 100}
-                    stripeKey="pk_test_51MecxESI2ynGCKECkwE6v1yAnK7Kpg47SvO2KIkNoslBDn09QKUMnMC3i8wASJH8Ob0Rb1di1ejeym0o2QTEcvpM00aLc6BcaX"
-                  >
-                    <button>Reserve Now</button>
-                  </StripeCheckout>
-                </div>
-              </div>
-            </Col>
+<div className="payment mt-3">
+<label htmlFor="" className="d-flex align-items-center gap-2">
+<input type="radio" value="cheque-payment" name="payment-method" /> Cheque Payment
+</label>
+</div>
+
+
+
+<div className="payment mt-3 d-flex align-items-center justify-content-between">
+<label htmlFor="" className="d-flex align-items-center gap-2">
+<input type="radio" value="paypal" name="payment-method" /> Paypal
+</label>
+</div>
+
+
+          {/* <div className="payment text-center mt-5">
+            <StripeCheckout
+              shippingAddress
+              token={onToken}
+              amount={totalAmount * 100}
+              stripeKey="pk_test_51MecxESI2ynGCKECkwE6v1yAnK7Kpg47SvO2KIkNoslBDn09QKUMnMC3i8wASJH8Ob0Rb1di1ejeym0o2QTEcvpM00aLc6BcaX"
+            >
+              <button>Reserve Now</button>
+            </StripeCheckout>
+          </div> */}
+
+
+
+
+<div className="payment text-center mt-5">
+<button onClick={handleReserveNowClick}>Reserve Now</button>
+
+</div>
+
+
+
+
+
+
+
+        </div>
+      </Col>
+      )}
+
+            
           </Row>
         </Container>
       </section>

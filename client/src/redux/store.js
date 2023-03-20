@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import { alertsReducer } from './reducers/alertsReducer';
 import { bookingsReducer } from './reducers/bookingsReducer';
 import { carsReducer } from './reducers/carsReducer';
-
+import {getUser} from './reducers/userReducer'
 const composeEnhancers = composeWithDevTools({
   // Specify here name, actionsBlacklist, actionsCreators and other options
 });
@@ -15,7 +15,9 @@ const composeEnhancers = composeWithDevTools({
 const rootReducer=combineReducers({
     carsReducer,
     alertsReducer,
-    bookingsReducer
+    bookingsReducer,
+    getUser,
+    
     
 })
 

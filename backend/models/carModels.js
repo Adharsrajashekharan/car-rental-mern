@@ -34,6 +34,8 @@ const carSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    place: String,
+
     fuelType: {
       type: String,
       required: true,

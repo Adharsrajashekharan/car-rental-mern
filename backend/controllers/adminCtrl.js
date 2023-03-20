@@ -2,6 +2,7 @@ const Car = require("../models/carModels")
 const userModel = require("../models/userModels");
 const { url } = require("../utils/cloudinary");
 const cloudinary =require('../utils/cloudinary')
+const bookingModels=require('../models/bookingModels')
 
 
 
@@ -36,7 +37,7 @@ const adminLogin=async(req,res)=>{
 
 const addCar =async(req,res)=>{
 console.log("bobby",req.body)
-const {name,description,image,rentPerHour,capacity,fuelType}=req.body
+const {name,description,image,rentPerHour,capacity,fuelType,place}=req.body
     try {
          const result =await cloudinary.uploader.upload(image,{
             folder:"products",
@@ -53,8 +54,9 @@ const {name,description,image,rentPerHour,capacity,fuelType}=req.body
             },
             rentPerHour,
             capacity,
-            fuelType
-        })
+            place,
+            fuelType,
+                })
         // const newCar =new Car(req.body)
         await newCar.save()
         res.send('car added Successfully')
@@ -109,4 +111,44 @@ const unblock= async(req,res)=>{
       if (err) return res.status(500).send(err);
       res.send(user);
 })};
-module.exports={adminLogin,addCar,block,unblock,editCar,deleteCar}
+
+
+// const bookedcars = async (req, res) => {
+//     try {
+//       const cars = await bookingModels.find({});
+//       const requiredcars = cars.map((car) => car.car);
+//       console.log("All Bookings: ", cars);
+//       console.log("Required Cars: ", requiredcars);
+//       res.send(requiredcars);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).send("Internal Server Error");
+//     }
+//   };
+
+// const bookedcars = async (req, res) => {
+//     try {
+//       const bookingCarIds = await bookingModels.distinct("car");
+//       const requiredCars = await Car.find({ _id: { $in: bookingCarIds } });
+//       console.log("All Bookings: ", bookingCarIds);
+//       console.log("Required Cars: ", requiredCars);
+//       res.send(requiredCars);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).send("Internal Server Error");
+//     }
+//   };
+
+const bookedcars = async (req, res) => {
+    try {
+      const bookingCars = await bookingModels
+        .find({})
+        .populate("car", "name model year"); // join the cars collection and select only the name, model, and year fields
+      console.log("All Bookings: ", bookingCars);
+      res.send(bookingCars);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+module.exports={adminLogin,addCar,block,unblock,editCar,deleteCar,bookedcars}

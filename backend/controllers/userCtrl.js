@@ -18,6 +18,23 @@ const stripe = require("stripe")("sk_test_51MecxESI2ynGCKECnrnTsDQ4vLCqj0iRGNdPG
 const session = require('express-session');
 const MemoryStore = session.MemoryStore;
 const sessionStore = new MemoryStore();
+const { url } = require("../utils/cloudinary");
+const cloudinary =require('../utils/cloudinary')
+const multer = require('multer'); 
+
+// Multer config
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+
+
+const upload = multer({ storage });
 
 
 
@@ -86,7 +103,7 @@ const registerController = async (req, res) => {
     // Generate OTP and send it to user's phone number
     const otp = Math.floor(1000 + Math.random() * 9000);
     await fast2sms.sendMessage({
-      authorization: process.env.FAST2SMS_API_KEY,
+      authorization:"LzDfy8EGHOTJwIxZB2WM9YbmFkcp0avodP3jg5CVitX4elqQh1zgl5y4rbwAYfDGJxcetus8T1aHWROS",
       message: `Your OTP is ${otp}. Please enter this to complete registration.`,
       numbers: [req.body.phoneNumber],
       // numbers: [9946633752],
@@ -133,6 +150,7 @@ const registerController = async (req, res) => {
 
 const { ObjectId } = require('mongodb');
 const bookingModel = require("../models/bookingModels");
+const { log } = require('console');
 
 // const idString = 'RGkVcH-Tbvj0AKd9RKdVpP051Da-1uZU';
 // const objectId = new ObjectId(idString);
@@ -190,6 +208,7 @@ const verifyOTPController = async (req, res) => {
 // login callback
 const loginController = async (req, res) => {
   try {
+    console.log(req.body)
     const allusers= await userModel.find({});
     const user = await userModel.findOne({ email: req.body.email });
     console.log(user)
@@ -301,6 +320,19 @@ const getallusers=async(req,res)=>{
   }
 }
 
+
+const updateDocuments = async (req, res) => {
+  try {
+    const result = await userModel.updateMany(
+      {}, // empty filter object to match all documents
+      { $set: { isAdmin: false } } // newfield will be set to "newvalue" for all matched documents
+    );
+    res.send({ status: "ok", data: result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: "Server error" });
+  }
+};
 
 const getallcars=async(req,res)=>{
   try {
@@ -610,7 +642,127 @@ console.log(bookingId)
   }
 
 
-module.exports = { loginController, registerController,forgotPasswordController,
-  getallusers,getallcars,bookCar,verifyOTPController,RazorPay,RazorSucess,bookcaroffline,getAllOrders,payment,getAllBookings,authController,cancelcarbooking };
+
+
+  // const userProfile = async(req,res)=>{
+
+  //   console.log("bobby",req.body)
+  //   const {name,description,image,rentPerHour,capacity,fuelType}=req.body
+  //       try {
+  //            const result =await cloudinary.uploader.upload(image,{
+  //               folder:"products",
+  //               width: 500,
+  //               height: 300,
+  //               crop: "scale"
+  //           })
+  //           const newCar =await Car.create({
+  //               name,
+  //               description,
+  //               image:{
+  //                   public_id:result.public_id,
+  //                   url:result.secure_url
+  //               },
+  //               rentPerHour,
+  //               capacity,
+  //               fuelType
+  //           })
+  //           // const newCar =new Car(req.body)
+  //           await newCar.save()
+  //           res.send('car added Successfully')
+  //       } catch (error) {
+  //           console.log(error)
+  //       }
+  //   }
+
+  const userProfile= async (req, res) => {
+    console.log("userProfile",req.body)
+    try {
+      const user = await userModel.find(req.body._id);
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
+      res.json(user);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  };
+
+
+// Update user profile
+const updateUserProfile = async (req, res) => {
+  try {
+    const user = await userModel.findOne(req.body._id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    const { name, email, bio } = req.body;
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.bio = bio || user.bio;
+    if (req.file) {
+      user.avatar = `/uploads/${req.file.filename}`;
+    }
+
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+
+
+
+const getUserInfo = async (req, res) => {
+  try {
+    const users = await userModel.findById(req.body.userId); // find all users with the specified id
+    console.log("users:", users);
+
+    res.status(200).send(users); // send the list of users as the response
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error retrieving users" });
+  }
+};
+
+const findcarusa=async(req,res)=>{
+  try {
+    const usa=await carmodel.find({place:"usa"})
+    res.send(usa)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const findcaruk=async(req,res)=>{
+  try {
+    const usa=await carmodel.find({place:"uk"})
+    res.send(usa)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const findcarcanada=async(req,res)=>{
+  try {
+    const usa=await carmodel.find({place:"canada"})
+    res.send(usa)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+
+
+
+module.exports = { loginController, registerController,getUserInfo,forgotPasswordController,userProfile,
+  getallusers,getallcars,bookCar,verifyOTPController,RazorPay,RazorSucess,bookcaroffline,getAllOrders,payment,getAllBookings,authController,cancelcarbooking,updateDocuments,findcarusa,findcarcanada,findcaruk };
 
 

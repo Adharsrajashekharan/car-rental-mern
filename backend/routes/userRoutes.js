@@ -1,4 +1,23 @@
 const express = require("express");
+const multer = require('multer');
+const path = require('path');
+
+// Multer config
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../../client/src/assets'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+
+
+
+const upload = multer({ storage });
+
+
 const {
   loginController,
   registerController,
@@ -14,7 +33,14 @@ const {
   payment,
   getAllBookings,
   authController,
-  cancelcarbooking
+  cancelcarbooking,
+  userProfile,
+  getUserInfo,
+  
+  updateDocuments,
+  findcarusa,
+  findcaruk,
+  findcarcanada
 } = require("../controllers/userCtrl");
 const authMiddleware = require("../middlewares/authMiddleware");
 const userModel = require("../models/userModels");
@@ -31,12 +57,9 @@ router.post("/register", registerController);
 
 router.post('/forgot-password',forgotPasswordController)
 
-router.get("/getallusers",getallusers)
-
-
+router.get("/getallusers",authMiddleware,getallusers)
 
 router.get("/getallcars",getallcars)
-
 
 router.post("/getuserdata",authMiddleware,authController)
 
@@ -47,7 +70,14 @@ router.post("/bookcaroffline",bookcaroffline)
 
 router.get("/orders",authMiddleware,getAllOrders) 
 
-router.get("/getallbookings",getAllBookings) 
+
+
+router.get("/getuserinfo",authMiddleware,getUserInfo) 
+
+
+
+
+router.get("/getallbookings",authMiddleware,getAllBookings) 
 
 
 router.post("/verify-otp",verifyOTPController)
@@ -59,6 +89,67 @@ router.post("/payment", payment)
 // router.post("/success",RazorSucess )
 
 router.post("/cancelcarbooking", cancelcarbooking)
+
+router.get("/profile", userProfile)
+
+
+router.post('/update',updateDocuments)
+
+
+router.get('/usa',authMiddleware,findcarusa)
+
+router.get('/uk',authMiddleware,findcaruk)
+
+router.get('/canada',authMiddleware,findcarcanada)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Update user profile
+router.put('/me',  upload.single('avatar'), async (req, res) => {
+  try {
+  
+    const user = await userModel.findById(req.body._id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    const { name, email, bio } = req.body;
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.bio = bio || user.bio;
+    if (req.file) {
+      user.avatar = `/uploads/${req.file.filename}`;
+    }
+
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 
 module.exports = router;

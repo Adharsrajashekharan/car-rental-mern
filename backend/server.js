@@ -1,8 +1,10 @@
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 const express = require("express");
 const colors = require("colors");
 const moragan = require("morgan");
 const dotenv = require("dotenv");
-const connectDB = require("./backend/config/db");
+const connectDB = require("./config/db");
 const cors = require('cors');
 const session = require("express-session");
 const passport = require("passport");
@@ -15,6 +17,12 @@ const app = express();
 
 //dotenv conig
 dotenv.config();
+
+
+
+
+
+
 
 
 
@@ -74,9 +82,9 @@ app.get("/auth/google/callback",
   });
 
 
-app.use("/api/v1/user", require("./backend/routes/userRoutes"));
+app.use("/api/v1/user", require("./routes/userRoutes"));
 // app.use("/api/v1/admin",require("./backend/routes/adminRoutes"))
-app.use("/api/v1/admin", require("./backend/routes/adminRoutes"));
+app.use("/api/v1/admin", require("./routes/adminRoutes"));
 
 
 

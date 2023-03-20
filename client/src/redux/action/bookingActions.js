@@ -49,7 +49,9 @@ export const getAllBookings=()=>async dispatch=>{
     dispatch({type:'LOADING',payload:true})
     try {
         console.log("fwfsfsfsfs")
-        const response =await config.get('/api/v1/user/getallbookings')
+        const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+
+        const response =await config.get('/api/v1/user/getallbookings',{headers})
         console.log("000000000",response)
         dispatch({type:'GET_ALL_BOOKINGS',payload:response.data})
         dispatch({type:'LOADING',payload:false})

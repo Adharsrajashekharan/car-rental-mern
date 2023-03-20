@@ -20,6 +20,7 @@ const dispatch =useDispatch()
 const [rentPerHour, setrentPerHour] = useState('')
 const [capacity, setcapacity] = useState('')
 const [fuelType, setfuelType] = useState('')
+const [place, setPlace] = useState('')
     //categories from the backend
 
     
@@ -43,7 +44,7 @@ const [fuelType, setfuelType] = useState('')
     const submitForm = (e) =>{
       e.preventDefault();
 
-      dispatch(addCar({ name, description, image,rentPerHour,capacity,fuelType,bookedTimeSlots }));
+      dispatch(addCar({ name, description, image,rentPerHour,capacity,fuelType,bookedTimeSlots,place }));
 
       setName('');
       setDescription('');
@@ -53,6 +54,7 @@ const [fuelType, setfuelType] = useState('')
       setcapacity('')
       setfuelType('')
       setbookedTimeSlots('')
+      setPlace('')
       toast.success('product created successfully');
   }
   
@@ -74,6 +76,11 @@ const [fuelType, setfuelType] = useState('')
             <div className="form-outline mb-4">
                 <textarea  onChange={(e)=>setDescription(e.target.value)}   type="text" id="form4Example2" className="form-control"  value={description}/>
                 <label className="form-label" htmlFor="form4Example2">Description </label>
+            </div>
+
+            <div className="form-outline mb-4">
+                <textarea  onChange={(e)=>setPlace(e.target.value)}   type="text" id="form4Example2" className="form-control"  value={place}/>
+                <label className="form-label" htmlFor="form4Example2">Country </label>
             </div>
 
            

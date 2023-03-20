@@ -161,12 +161,30 @@ const Userdetails = () => {
     },
   ];
 
+  // useEffect(() => {
+  //   config.get('/api/v1/user/getallusers').then(res => {
+  //     console.log(res.data.data);
+  //     setData(res.data.data);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    config.get('/api/v1/user/getallusers').then(res => {
-      console.log(res.data.data);
-      setData(res.data.data);
-    });
+
+
+    // headers:{
+    //   Authorization:"Bearer " + localStorage.getItem("token")
+    //       }
+    const headers = { 'Authorization': 'Bearer ' + localStorage.getItem("token") };
+    config.get('/api/v1/user/getallusers', { headers })
+      .then(res => {
+        console.log(res.data.data);
+        setData(res.data.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }, []);
+
 
   return (
     <>

@@ -4,9 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import Google from "../../components/UserComponents/Authenticate/Authenticate";
 import config from "../../config";
 import styles from "./styles.module.css";
+import { getUserInfo} from '../../../src/redux/action/userActions'
+import { useDispatch } from "react-redux";
+
+
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch=useDispatch()
+
 
   //form handler
   const onFinishHandler = async (values) => {
@@ -15,6 +21,10 @@ const Login = () => {
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
         message.success("Login Successfully");
+
+        //  dispatch(getUserInfo())
+
+        
         navigate("/");
         localStorage.setItem("User", JSON.stringify(res.data.user));
       } else {

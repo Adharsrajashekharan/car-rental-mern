@@ -13,7 +13,6 @@ import { useSelector,useDispatch } from "react-redux";
 import CarItem from "../../components/UserComponents/UI/CarItem";
 import Testimonial from "../../components/UserComponents/UI/Testimonial";
 import {DatePicker} from "antd"
-import { Form, FormGroup } from "reactstrap";
 import config from '../../config'
 // setFrom(values[0].format("MMM DD YYYY HH:mm"));
 // setTo(values[1].format("MMM DD YYYY HH:mm"));
@@ -44,6 +43,10 @@ getUserData()
 
 
 
+useEffect(() => {
+ 
+
+},);
 
 
 
@@ -147,6 +150,7 @@ useEffect(() => {
 
             <BlogList />
           </Row>
+
         </Container>
       </section>
       <Footer/>

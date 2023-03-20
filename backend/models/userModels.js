@@ -21,6 +21,21 @@ const userSchema = new mongoose.Schema({
   phoneNumber:{
     type:Number
   },
+
+  pic: {
+    type: String,
+    required: true,
+    default:
+      "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+  },
+  bio: {
+    type: String
+  },
+  avatar: {
+    type: String
+  },
+
+
   googleId: String,
 
   secret: String,
@@ -40,6 +55,11 @@ const userSchema = new mongoose.Schema({
 
 // required:true,
   },
+
+  isAdmin:{
+    type:Boolean,
+    default:false
+      },
 });
 
 

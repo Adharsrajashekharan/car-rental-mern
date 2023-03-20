@@ -11,6 +11,14 @@ import {useNavigate} from 'react-router-dom'
 
 
 const UserBookings = () => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleCancelBooking = (bookingId) => {
+    dispatch(cancelCarBooking(bookingId));
+    setcancelcar([...cancelcar,bookingId])  
+    setShowPopup(false); // close the popup after canceling
+  };
+
   const [cancelcar, setcancelcar] = useState([])
     const { bookings } = useSelector((state) => state.bookingsReducer);
 const {loading} = useSelector((state) => state.alertsReducer);
@@ -30,11 +38,11 @@ const user = JSON.parse(localStorage.getItem("User"));
     
 
 
-const handleCancelBooking = (bookingId) => {
-    dispatch(cancelCarBooking(bookingId));
-     setcancelcar([...cancelcar,bookingId])
+// const handleCancelBooking = (bookingId) => {
+//     dispatch(cancelCarBooking(bookingId));
+//      setcancelcar([...cancelcar,bookingId])
     
-  };
+//   };
 
   return (
     <>
@@ -98,12 +106,38 @@ const handleCancelBooking = (bookingId) => {
                       height="140"
                       className="p-2"
                     />
-                    <button
+                    {/* <button
                       onClick={() => handleCancelBooking(booking._id)}
                       className="btn btn-danger mt-3"
                     >
                       Cancel Booking
-                    </button>
+                    </button> */}
+
+<button
+        onClick={() => setShowPopup(true)}
+        className="btn btn-danger mt-3"
+      >
+        Cancel Booking
+      </button>
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <p>Are you sure you want to cancel this booking?</p>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowPopup(false)}
+            >
+              No
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={() => handleCancelBooking(booking._id)}
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      )}
                   </Col>
                 </Row>
               );
