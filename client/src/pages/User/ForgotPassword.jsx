@@ -4,7 +4,6 @@ import { Form, Input, message } from "antd";
 import styles from "./styles.module.css";
 import "../../styles/UserStyles/RegisterStyles.css";
 import {  Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import config from '../../config'
 
 const ForgotPassword = () => {
@@ -56,7 +55,7 @@ const ForgotPassword = () => {
         className="register-form "
       >
  <div className={styles.container}>
- <h1 className={styles.heading}>Forgot Password</h1>
+ {/* <h1 className={styles.heading}>Forgot Password</h1> */}
  <div className={styles.form_container}>
    <div className={styles.left}>
      <img className={styles.img} style={{marginLeft:"10%"}} src="https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-4652.jpg?w=740&t=st=1676263392~exp=1676263992~hmac=ea77b10ef063b8e09b2f2a2c34ba4a09491f9c8d8fac3d6b7fab4752b6c3a774" alt="login" />
@@ -79,10 +78,10 @@ const ForgotPassword = () => {
      
      <button type='submit' className={styles.btn}>Reset-password</button>      
      <p className={styles.text}>or</p>
-     <button className={styles.google_btn} onClick="">
+     {/* <button className={styles.google_btn} onClick="">
        <img src="https://static.vecteezy.com/system/resources/previews/010/353/285/original/colourful-google-logo-on-white-background-free-vector.jpg" alt="google icon" />
        <span>Sign in with Google</span>
-     </button>
+     </button> */}
      <p className={styles.text}>
        Know-Password ? <Link to="/login">Log in</Link>
      </p>
