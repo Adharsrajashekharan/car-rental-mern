@@ -12,10 +12,13 @@ const bookingSchema = new mongoose.Schema({
   totalAmount:{type:Number},
   transactionId:{type:String},
   driverRequired:{type:Boolean},
-  
+  pickupAddress:{type:String},
+  place:{type:String},
+
   cancelled: { type: Boolean,
     default: false 
 },
+
 },
 {timestamps:true}
 );

@@ -19,9 +19,11 @@ const userSchema = new mongoose.Schema({
     // required: [true, "password is required"],
   },
   phoneNumber:{
-    type:Number
+    type:Number,
+    unique:true
   },
 
+  
   pic: {
     type: String,
     required: true,
@@ -31,10 +33,12 @@ const userSchema = new mongoose.Schema({
   bio: {
     type: String
   },
+  URLS:{
+    type: String
+  },
   avatar: {
     type: String
   },
-
 
   googleId: String,
 
@@ -64,12 +68,44 @@ const userSchema = new mongoose.Schema({
 
 
 
+
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate)
 
 
 
 const userModel = mongoose.model("users", userSchema);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 passport.use(userModel.createStrategy());

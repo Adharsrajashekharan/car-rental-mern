@@ -48,7 +48,7 @@ ul {
 }
 
 .section__title {
-  color: #d22a2a;
+  color: #001948;
   font-weight: 600;
   font-size: 2rem;
 }
@@ -385,3 +385,153 @@ form .btn:hover{
 .booking-info .p-3 {
   padding: 10px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* otp-lottie */
+
+
+
+
+
+ .containe_r {
+     height: 100vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-direction: column;
+     background-color: #f5f5f5;
+     position: relative;
+   }
+  
+   .containe_r .lottie {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     pointer-events: none;
+   }
+  
+   .form-containe_r {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-direction: column;
+     width: 100%;
+     max-width: 400px;
+     background-color: #fff;
+     padding: 30px;
+     border-radius: 5px;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   }
+  
+   .form-containe_r h1 {
+     font-size: 24px;
+     font-weight: 700;
+     margin-bottom: 30px;
+     /* bottom: -30px; */
+     text-align: center;
+   }
+  
+
+
+
+
+
+
+
+
+
+
+   
+   .profile-card {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .profile-card h2 {
+    margin: 0;
+  }
+  
+  .profile-card p {
+    margin: 0;
+  }
+  
+  .profile-card .header {
+    margin-bottom: 20px;
+  }
+  
+  .profile-card label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .profile-card input[type="text"],
+  .profile-card textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-card button {
+    background-color: #ff5757;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .profile-card button:focus {
+    outline: none;
+  }
+  
+  .profile-card button:active {
+    background-color: #ff4444;
+  }
+  
+  .profile-card button:hover {
+    background-color: #ff4444;
+  }
+
+
+  .toggle-button {
+    text-align: center;
+  }
+  
+  .toggle-button button {
+    display: inline-block;
+    margin: 0 auto;
+  }
+
+  .centered-button {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  
+  

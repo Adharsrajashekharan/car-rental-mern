@@ -43,7 +43,7 @@ const Login = () => {
           <div className={styles.left}>
             <img
               className={styles.img}
-              src="https://egymerch.com/site_assets/assets/imgs/login/login.png"
+              src="https://media.istockphoto.com/id/1281150061/vector/register-account-submit-access-login-password-username-internet-online-website-concept.jpg?s=612x612&w=0&k=20&c=9HWSuA9IaU4o-CK6fALBS5eaO1ubnsM08EOYwgbwGBo="
               alt="login"
             />
           </div>
@@ -85,8 +85,8 @@ const Login = () => {
               <Button style={{width:'10rem',align:'center'}} type="primary" htmlType="submit" className={styles.btn}>
                 Log In
               </Button>
-              <p className={styles.text}>or</p>
-              <Google />
+              <p className={styles.text}></p>
+              {/* <Google /> */}
               <p  className={styles.text}>
                 New Here ? <Link style={{textDecoration:'none'}} to="/register">Sign Up</Link>
               </p>

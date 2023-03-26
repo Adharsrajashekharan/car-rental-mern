@@ -6,7 +6,7 @@
   }
   
   .car__item-info span i {
-    color: #ec1010;
+    color: #e54848;
     font-size: 1.1rem;
   }
   
@@ -14,7 +14,7 @@
     border-radius: 0;
     border: none;
     outline: none;
-    background: #000d6b;
+    background: #98c0ad;
     padding: 8px 0px;
   }
   
@@ -28,7 +28,7 @@
     color: #fff;
   }
   .car__btn-details {
-    background: #f9a826;
+    background: #2e322f;
     border-radius: 0px 4px 4px 0px;
   }
   

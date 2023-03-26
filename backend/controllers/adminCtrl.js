@@ -37,7 +37,7 @@ const adminLogin=async(req,res)=>{
 
 const addCar =async(req,res)=>{
 console.log("bobby",req.body)
-const {name,description,image,rentPerHour,capacity,fuelType,place}=req.body
+const {name,description,image,rentPerHour,capacity,fuelType,place,pickType}=req.body
     try {
          const result =await cloudinary.uploader.upload(image,{
             folder:"products",
@@ -56,6 +56,7 @@ const {name,description,image,rentPerHour,capacity,fuelType,place}=req.body
             capacity,
             place,
             fuelType,
+            pickType
                 })
         // const newCar =new Car(req.body)
         await newCar.save()
@@ -151,4 +152,28 @@ const bookedcars = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   };
-module.exports={adminLogin,addCar,block,unblock,editCar,deleteCar,bookedcars}
+
+  
+
+  const reservedCars = async (req, res) => {
+    try {
+      const bookingCars = await bookingModels
+        .find()
+        .populate("car");
+  
+      const totalHoursList = bookingCars.map(booking => booking.totalHours);
+      console.log("List of Total Hours: ", totalHoursList);
+  
+      res.send(bookingCars);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  
+
+
+
+
+module.exports={adminLogin,addCar,block,unblock,editCar,deleteCar,bookedcars,reservedCars}

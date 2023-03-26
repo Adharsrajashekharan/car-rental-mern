@@ -1,6 +1,8 @@
 import { message } from 'antd'
 import axios from 'axios'
 import config from '../../config'
+const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+
 export const getallcars=()=>async dispatch=>{
     dispatch({type:'LOADING',payload:true})
     try {
@@ -21,7 +23,7 @@ export const addCar=(reqObj)=>async dispatch=>{
 
     try {
         console.log("first",reqObj)
-        await config.post('/api/v1/admin/add-car',reqObj)
+        await config.post('/api/v1/admin/add-car',reqObj,{headers})
         message.success("car added")
         // setTimeout(() => {
         //     window.location.href='/admin/dashboard'
@@ -36,7 +38,7 @@ export const editCar=(reqObj)=>async dispatch=>{
     dispatch({type:'LOADING',payload:true})
 
     try {
-        await config.post('/api/v1/admin/editcar',reqObj)
+        await config.post('/api/v1/admin/editcar',reqObj,{headers})
         message.success("car details updated")
 
         setTimeout(() => {
@@ -56,7 +58,7 @@ export const deleteCar=(reqObj)=>async dispatch=>{
     try {
         console.log("bumbo",reqObj)
         
-        await config.post('/api/v1/admin/deletecar',reqObj)
+        await config.post('/api/v1/admin/deletecar',reqObj,{headers})
         message.success("car deleted")
 
        

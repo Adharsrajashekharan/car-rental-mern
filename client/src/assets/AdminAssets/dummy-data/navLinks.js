@@ -5,6 +5,12 @@ const navLinks = [
     display: "Dashboard",
   },
   {
+    path: "/admin/bookings",
+    icon: "ri-taxi-line",
+    display: "Bookings",
+  },
+
+  {
     path: "/admin/add-car",
     icon: "ri-add-box-line",
     display: "Add car",

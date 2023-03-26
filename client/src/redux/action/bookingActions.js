@@ -1,11 +1,13 @@
 import axios from 'axios'
 import {message} from 'antd'
 import config from '../../config'
+const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+
 
 export const bookCar=(reqObj)=>async dispatch=>{
     dispatch({type:'LOADING',payload:true})
     try {
-        const response =await config.post('/api/v1/user/bookcar',reqObj)
+        const response =await config.post('/api/v1/user/bookcar',reqObj,{headers})
         dispatch({type:'LOADING',payload:false})
         message.success('car booked successfully')
         setTimeout(() => {
@@ -28,13 +30,9 @@ export const bookCar=(reqObj)=>async dispatch=>{
 export const bookCarOffline=(reqObj)=>async dispatch=>{
     dispatch({type:'LOADING',payload:true})
     try {
-        const response =await config.post('/api/v1/user/bookcaroffline',reqObj)
+        const response =await config.post('/api/v1/user/bookcaroffline',reqObj,{headers})
         dispatch({type:'LOADING',payload:false})
         message.success('car booked successfully')
-        // setTimeout(() => {
-        //     window.location.href('/orders')
-
-        // }, 500);
         console.log(response.data)
 
     } catch (error) {
@@ -70,7 +68,34 @@ export const cancelCarBooking=(reqObj)=>async dispatch=>{
     }
     try {
         console.log("brumbo",reqObj)
-        const response =await config.post('/api/v1/user/cancelcarbooking',bo)
+        const response =await config.post('/api/v1/user/cancelcarbooking',bo,{headers})
+        dispatch({type:'LOADING',payload:false})
+        message.success(' booking cancelled')
+        setTimeout(() => {
+            window.location.href('/orders')
+
+        }, 500);
+        console.log(response.data)
+    } catch (error) {
+        console.log(error)
+        dispatch({type:'LOADING',payload:false})
+        console.log(error)
+        message.error("car not cancelled please try again")
+
+    }
+}
+
+
+export const uncancelCarBooking=(reqObj)=>async dispatch=>{
+    dispatch({type:'LOADING',payload:true})
+    console.log(" reached here at uncancel")
+    const bo={
+        reqObj
+    }
+    
+    try {
+        console.log("brumbo",reqObj)
+        const response =await config.post('/api/v1/user/uncancelcarbooking',bo,{headers})
         dispatch({type:'LOADING',payload:false})
         message.success(' booking cancelled')
         setTimeout(() => {

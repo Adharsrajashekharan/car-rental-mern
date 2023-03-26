@@ -14,7 +14,7 @@ const CarUsa = () => {
       try {
         const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
 
-        const response = await config.get("/api/v1/user/usa",{headers});
+        const response = await config.get("/api/v1/user/trivandrum");
         const bookingCars = response.data;
         setBookings(bookingCars);
       } catch (error) {

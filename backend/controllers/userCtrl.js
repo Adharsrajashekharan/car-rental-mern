@@ -21,7 +21,9 @@ const sessionStore = new MemoryStore();
 const { url } = require("../utils/cloudinary");
 const cloudinary =require('../utils/cloudinary')
 const multer = require('multer'); 
-
+const { ObjectId } = require('mongodb');
+const bookingModel = require("../models/bookingModels");
+const { log } = require('console');
 // Multer config
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -90,223 +92,221 @@ const upload = multer({ storage });
 // };
 
 
-const registerController = async (req, res) => {
-  try {
-    console.log(req.body)
-    const exisitingUser = await userModel.findOne({ email: req.body.email });
-    if (exisitingUser) {
-      return res
-        .status(200)
-        .send({ message: "User Already Exist", success: false });
-    }
+// const registerController = async (req, res) => {
+//   try {
+//     console.log(req.body)
+//     const exisitingUser = await userModel.findOne({ email: req.body.email });
+//     if (exisitingUser) {
+//       return res
+//         .status(200)
+//         .send({ message: "User Already Exist", success: false });
+//     }
 
-    // Generate OTP and send it to user's phone number
-    const otp = Math.floor(1000 + Math.random() * 9000);
-    await fast2sms.sendMessage({
-      authorization:"LzDfy8EGHOTJwIxZB2WM9YbmFkcp0avodP3jg5CVitX4elqQh1zgl5y4rbwAYfDGJxcetus8T1aHWROS",
-      message: `Your OTP is ${otp}. Please enter this to complete registration.`,
-      numbers: [req.body.phoneNumber],
-      // numbers: [9946633752],
-    });
+//     // Generate OTP and send it to user's phone number
+//     const otp = Math.floor(1000 + Math.random() * 9000);
+//     await fast2sms.sendMessage({
+//       authorization:"LzDfy8EGHOTJwIxZB2WM9YbmFkcp0avodP3jg5CVitX4elqQh1zgl5y4rbwAYfDGJxcetus8T1aHWROS",
+//       message: `Your OTP is ${otp}. Please enter this to complete registration.`,
+//       numbers: [req.body.phoneNumber],
+//       // numbers: [9946633752],
+//     });
 
-    const password = req.body.password;
-    //stored in session
-    req.session.otp=otp
-    console.log("rrrrr",req.session.otp)
-    req.session.email=req.body.email;
-    const sessionId = req.sessionID;
-    console.log(sessionId)
+//     const password = req.body.password;
+//     //stored in session
+//     req.session.otp=otp
+//     console.log("rrrrr",req.session.otp)
+//     req.session.email=req.body.email;
+//     const sessionId = req.sessionID;
+//     console.log(sessionId)
 
-    sessionStore.get(sessionId, (error, session) => {
-      if (error) {
-        console.log('Error getting session:', error);
-      } else if (!session) {
-        console.log(`Session ${sessionId} not found`);
-      } else {
-        console.log(`Session ${sessionId} found:`, session);
-      }
-    });
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    req.body.password = hashedPassword;
-    const newUser = new userModel(req.body);
-    await newUser.save();
-    console.log(newUser.email);
-    req.session.email=newUser.email
-    console.log(req.session.email)
-    res.status(201).send({ message: "Register Sucessfully", success: true ,sessionId});
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: `Register Controller ${error.message}`,
-    });
-  }
-};
-
-
+//     sessionStore.get(sessionId, (error, session) => {
+//       if (error) {
+//         console.log('Error getting session:', error);
+//       } else if (!session) {
+//         console.log(`Session ${sessionId} not found`);
+//       } else {
+//         console.log(`Session ${sessionId} found:`, session);
+//       }
+//     });
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+//     req.body.password = hashedPassword;
+//     const newUser = new userModel(req.body);
+//     await newUser.save();
+//     console.log(newUser.email);
+//     req.session.email=newUser.email
+//     console.log(req.session.email)
+//     res.status(201).send({ message: "Register Sucessfully", success: true ,sessionId});
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       message: `Register Controller ${error.message}`,
+//     });
+//   }
+// };
 
 
 
-const { ObjectId } = require('mongodb');
-const bookingModel = require("../models/bookingModels");
-const { log } = require('console');
+
+
+
 
 // const idString = 'RGkVcH-Tbvj0AKd9RKdVpP051Da-1uZU';
 // const objectId = new ObjectId(idString);
 
 
-const verifyOTPController = async (req, res) => {
-  try {
-    const { otp, sessionId } = req.body;
-    let orginalotp = '';
-     let email ='';
-    const session = await new Promise((resolve, reject) => {
-      req.sessionStore.get(sessionId, (err, session) => {
-        if (err) {
-          console.log(err);
-          reject('Session not found');
-        } else {
-          resolve(session);
-        }
-      });
-    });
+// const verifyOTPController = async (req, res) => {
+//   try {
+//     const { otp, sessionId } = req.body;
+//     let orginalotp = '';
+//      let email ='';
+//     const session = await new Promise((resolve, reject) => {
+//       req.sessionStore.get(sessionId, (err, session) => {
+//         if (err) {
+//           console.log(err);
+//           reject('Session not found');
+//         } else {
+//           resolve(session);
+//         }
+//       });
+//     });
 
-    if (session) {
-      orginalotp = session.otp;
-      email=session.email
-      console.log("this is", orginalotp);
-    } else {
-      console.log('Session not found');
-    }
+//     if (session) {
+//       orginalotp = session.otp;
+//       email=session.email
+//       console.log("this is", orginalotp);
+//     } else {
+//       console.log('Session not found');
+//     }
 
-    // OTP verification code goes here...
+//     // OTP verification code goes here...
 
     
-  console.log("ogi",typeof(otp),"ooooootttpp", orginalotp ,typeof(orginalotp))
-    if (otp === orginalotp.toString()) {
-      console.log("email",req.session.email)
-      console.log(req.session.id)
-      const user = await userModel.findOne({email});
-    if (!user) {
-      return res.status(404).send({ success: false, message: 'User not found' });
-    }
-    user.isVerified = true;
-      console.log(user.isVerified);
-      console.log('44444444444', user);
-    await user.save();
-    res.status(200).send({ message: 'OTP verified successfully', success: true });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ success: false, message: `Verify OTP Controller ${error.message}` });
-  }
-};
+//   console.log("ogi",typeof(otp),"ooooootttpp", orginalotp ,typeof(orginalotp))
+//     if (otp === orginalotp.toString()) {
+//       console.log("email",req.session.email)
+//       console.log(req.session.id)
+//       const user = await userModel.findOne({email});
+//     if (!user) {
+//       return res.status(404).send({ success: false, message: 'User not found' });
+//     }
+//     user.isVerified = true;
+//       console.log(user.isVerified);
+//       console.log('44444444444', user);
+//     await user.save();
+//     res.status(200).send({ message: 'OTP verified successfully', success: true });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({ success: false, message: `Verify OTP Controller ${error.message}` });
+//   }
+// };
 
 
 
 // login callback
-const loginController = async (req, res) => {
-  try {
-    console.log(req.body)
-    const allusers= await userModel.find({});
-    const user = await userModel.findOne({ email: req.body.email });
-    console.log(user)
+// const loginController = async (req, res) => {
+//   try {
+//     console.log(req.body)
+//     const allusers= await userModel.find({});
+//     const user = await userModel.findOne({ email: req.body.email });
+//     console.log(user)
     
 
-  //  localStorage.setItem('user',JSON.stringify(user.data))
-    if (!user ||user.access===false) {
-      return res
-        .status(200)
-        .send({ message: "user not found", success: false });
-    }
+//   //  localStorage.setItem('user',JSON.stringify(user.data))
+//     if (!user ||user.access===false) {
+//       return res
+//         .status(200)
+//         .send({ message: "user not found", success: false });
+//     }
 
 
-    // if(user.)
-    //compares both
-    const isMatch = await bcrypt.compare(req.body.password, user.password);
-    if (!isMatch) {
-      return res
-        .status(200)
-        .send({ message: "Invlid EMail or Password", success: false });
-    }
-    const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+//     // if(user.)
+//     //compares both
+//     const isMatch = await bcrypt.compare(req.body.password, user.password);
+//     if (!isMatch) {
+//       return res
+//         .status(200)
+//         .send({ message: "Invlid EMail or Password", success: false });
+//     }
+//     const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
 
-    });
+//     });
    
 
-    res.status(200).send({ message: "Login Success", success: true, token ,user});
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: `Error in Login CTRL ${error.message}` });
-  }
-};
+//     res.status(200).send({ message: "Login Success", success: true, token ,user});
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({ message: `Error in Login CTRL ${error.message}` });
+//   }
+// };
 //forgot password 
 
-const forgotPasswordController=async(req,res)=>{
-try {
+// const forgotPasswordController=async(req,res)=>{
+// try {
 
-  const {email,answer,newpassword}=req.body
-  console.log("mmm",req.body)
-  if(!email){
-    return res.status(400).send({message:"email is required"})
-  }
-  if(!answer){
-    return  res.status(400).send({message:"ans is required"})
-  }
+//   const {email,answer,newpassword}=req.body
+//   console.log("mmm",req.body)
+//   if(!email){
+//     return res.status(400).send({message:"email is required"})
+//   }
+//   if(!answer){
+//     return  res.status(400).send({message:"ans is required"})
+//   }
 
-  if(!newpassword){
-    return res.status(400).send({message:"new pass is required"})
-  }
-  const user =await userModel.findOne({email})
-  console.log("222",user)
+//   if(!newpassword){
+//     return res.status(400).send({message:"new pass is required"})
+//   }
+//   const user =await userModel.findOne({email})
+//   console.log("222",user)
 
-  if(!user){
-    return res.status(404).json({
-      success:false,
-      message:"wrong email or password"
-    })
-   }
-  const salt = await bcrypt.genSalt(10);
-  const password = req.body.newpassword;
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const id=user.id
-console.log("amal",user)
-  if(answer==user.answer){
+//   if(!user){
+//     return res.status(404).json({
+//       success:false,
+//       message:"wrong email or password"
+//     })
+//    }
+//   const salt = await bcrypt.genSalt(10);
+//   const password = req.body.newpassword;
+//   const hashedPassword = await bcrypt.hash(password, salt);
+//   const id=user.id
+// console.log("amal",user)
+//   if(answer==user.answer){
 
-    await userModel.findByIdAndUpdate( id, { password:hashedPassword },
-      function (err, docs) {
-if (err){
-console.log("hello",err)
-}
-else{
-console.log("Updated Usersz : ", docs);
-}
-});
+//     await userModel.findByIdAndUpdate( id, { password:hashedPassword },
+//       function (err, docs) {
+// if (err){
+// console.log("hello",err)
+// }
+// else{
+// console.log("Updated Usersz : ", docs);
+// }
+// });
 
-  }
+//   }
 
-  else{
+//   else{
 
    
-    console.log("enter correct answer....")
+//     console.log("enter correct answer....")
 
-    return res.status(200).json({
-      success:false,
-      message:"Incorrect secret Answer"
-    })
-  }
+//     return res.status(200).json({
+//       success:false,
+//       message:"Incorrect secret Answer"
+//     })
+//   }
 
-} catch (error) {
-  console.log(error.message)
-  res.status(400).send({
-    success:false,  
-    message:"something went wr",
-    error
-  })
-}
-}
+// } catch (error) {
+//   console.log(error.message)
+//   res.status(400).send({
+//     success:false,  
+//     message:"something went wr",
+//     error
+//   })
+// }
+// }
 
 const getallusers=async(req,res)=>{
   try {
@@ -431,17 +431,7 @@ const RazorPay=async(req,res)=>{
 
     const order = await instance.orders.create(options);
 
-  //   if(order){
-  //     req.body.transactionId=payment.source.id
-  // const newbooking= new Booking(req.body)
-  // await newbooking.save()
-  // const car =await Car.findOne({_id:req.body.car})
-  // console.log("duuuuuuuu",car)
-  
-  // car.bookedTimeSlots.push(req.body.bookedTimeSlots)
-  // await car.save()
-  // res.send("your booking is successfull")
-  //   }
+
 
     if (!order) return res.status(500).send("Some error occured");
 
@@ -498,64 +488,64 @@ const RazorSucess=async(req,res)=>{
     }
 };
 
-const bookcaroffline=async(req,res)=>{
-  try {
-    const newbooking= new Booking(req.body)
-await newbooking.save()
-const car =await Car.findOne({_id:req.body.car})
-console.log("duuuuuuuu",car)
-car.bookedTimeSlots.push(req.body.bookedTimeSlots)
-await car.save()
-res.send("your booking is successfull")
-}
-catch (error) {
-  console.log(error)
-  res.status(400).send({message:"wrong"})
+// const bookcaroffline=async(req,res)=>{
+//   try {
+//     const newbooking= new Booking(req.body)
+// await newbooking.save()
+// const car =await Car.findOne({_id:req.body.car})
+// console.log("duuuuuuuu",car)
+// car.bookedTimeSlots.push(req.body.bookedTimeSlots)
+// await car.save()
+// res.send("your booking is successfull")
+// }
+// catch (error) {
+//   console.log(error)
+//   res.status(400).send({message:"wrong"})
 
-  }
-}
+//   }
+// }
 
 
 
-const bookCar= async(req,res)=>{
-  // req.body.transactionId ="1234"
-  const {token}=req.body
-  console.log("00000",token)
-  console.log("11111",req.body)
+// const bookCar= async(req,res)=>{
+//   // req.body.transactionId ="1234"
+//   const {token}=req.body
+//   console.log("00000",token)
+//   console.log("11111",req.body)
 
-  try {
-const customer =await stripe.customers.create({
-  email:token.email,
-  source:token.id
-})
-const payment =await stripe.paymentIntents.create({
-  amount:req.body.totalAmount*100,
-  currency:'usd',
-  customer:customer.id,
-  receipt_email:token.email
-},{
-  idempotencyKey:uuidv4(),
-}
-)
-if(payment){
-  req.body.transactionId=payment.id
-  const newbooking= new Booking(req.body)
-  await newbooking.save()
-  const car =await Car.findOne({_id:req.body.car})
-  console.log("duuuuuuuu",car)
+//   try {
+// const customer =await stripe.customers.create({
+//   email:token.email,
+//   source:token.id
+// })
+// const payment =await stripe.paymentIntents.create({
+//   amount:req.body.totalAmount*100,
+//   currency:'usd',
+//   customer:customer.id,
+//   receipt_email:token.email
+// },{
+//   idempotencyKey:uuidv4(),
+// }
+// )
+// if(payment){
+//   req.body.transactionId=payment.id
+//   const newbooking= new Booking(req.body)
+//   await newbooking.save()
+//   const car =await Car.findOne({_id:req.body.car})
+//   console.log("duuuuuuuu",car)
   
-  car.bookedTimeSlots.push(req.body.bookedTimeSlots)
-  await car.save()
-  res.send("your booking is successfull")
-}
-else{
-  res.status(400).send({message:"wrong"})
-}
-  } catch (error) {
-    console.log(error)
-    res.status(400).send({message:"wrong"})
-  }
-}
+//   car.bookedTimeSlots.push(req.body.bookedTimeSlots)
+//   await car.save()
+//   res.send("your booking is successfull")
+// }
+// else{
+//   res.status(400).send({message:"wrong"})
+// }
+//   } catch (error) {
+//     console.log(error)
+//     res.status(400).send({message:"wrong"})
+//   }
+// }
 
 const getAllOrders=async(req,res)=>{
 
@@ -593,6 +583,7 @@ const payment =async(req,res)=>{
       })
     }
   }
+  
   const getAllBookings=async(req,res)=>{
     try {
       //you need to have a reference to cars in schema to use populate
@@ -625,23 +616,42 @@ const payment =async(req,res)=>{
      }
   }
 
-  const cancelcarbooking=async(req,res)=>{
-    console.log("depu",req.body)
+//   const cancelcarbooking=async(req,res)=>{
+//     console.log("depu",req.body)
     
-    const bookingId = req.body.reqObj;
+//     const bookingId = req.body.reqObj;
 
-    // const update = Booking.updateMany({}, { $set: { "cancelled": false /* and other fields */ } });
-    const update = await Booking.findByIdAndUpdate({_id:req.body.reqObj}, { $set: { cancelled: true } });
-    // const deletecar =await Car.findByIdAndUpdate({_id:req.body.carid},{ $set: { deleted: true } })
+//     // const update = Booking.updateMany({}, { $set: { "cancelled": false /* and other fields */ } });
+//     const update = await Booking.findByIdAndUpdate({_id:req.body.reqObj}, { $set: { cancelled: true } });
+//     // const deletecar =await Car.findByIdAndUpdate({_id:req.body.carid},{ $set: { deleted: true } })
 
-    // const bookingId = req.body.bookingId;
+//     // const bookingId = req.body.bookingId;
 
-    console.log("nn",update)
-
-console.log(bookingId)
-  }
+//     console.log("nn",update)
 
 
+// console.log(bookingId)
+//   }
+
+
+
+
+//   const uncancelcarbooking=async(req,res)=>{
+
+//     console.log("depu",req.body)
+    
+//     const bookingId = req.body.reqObj;
+
+//     // const update = Booking.updateMany({}, { $set: { "cancelled": false /* and other fields */ } });
+//     const update = await Booking.findByIdAndUpdate({_id:req.body.reqObj}, { $set: { cancelled: false } });
+//     // const deletecar =await Car.findByIdAndUpdate({_id:req.body.carid},{ $set: { deleted: true } })
+
+//     // const bookingId = req.body.bookingId;
+
+//     console.log("nn",update)
+
+// console.log(bookingId)
+//   }
 
 
   // const userProfile = async(req,res)=>{
@@ -762,7 +772,7 @@ const findcarcanada=async(req,res)=>{
 
 
 
-module.exports = { loginController, registerController,getUserInfo,forgotPasswordController,userProfile,
-  getallusers,getallcars,bookCar,verifyOTPController,RazorPay,RazorSucess,bookcaroffline,getAllOrders,payment,getAllBookings,authController,cancelcarbooking,updateDocuments,findcarusa,findcarcanada,findcaruk };
+module.exports = { getUserInfo,userProfile,
+  getallusers,getallcars,RazorPay,RazorSucess,getAllOrders,payment,getAllBookings,authController,updateDocuments,findcarusa,findcarcanada,findcaruk };
 
 

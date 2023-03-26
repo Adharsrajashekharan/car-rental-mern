@@ -16,7 +16,7 @@ const CarUk = () => {
       try {
         const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
 
-        const response = await config.get("/api/v1/user/uk",{headers});
+        const response = await config.get("/api/v1/user/ernakulam");
         const bookingCars = response.data;
         console.log("mpi",bookingCars)
         setBookings(bookingCars);

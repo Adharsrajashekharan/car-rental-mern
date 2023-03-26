@@ -15,7 +15,7 @@ const Bookings = () => {
       <div className="booking__wrapper">
         <h2 className="booking__title">Booking</h2>
 
-        <div className="filter__widget-wrapper">
+        {/* <div className="filter__widget-wrapper">
           <div className="filter__widget-01">
             <select>
               <option value="New">New</option>
@@ -31,12 +31,13 @@ const Bookings = () => {
               <option value="audi">Audi</option>
             </select>
           </div>
-        </div>
+        </div> */}
 
         <div className="booking__car-list">
-          {carData?.map((item) => (
+          {carData?.slice(0,1).map((item) => (
             <CarItem item={item} key={item.id} />
           ))}
+          {/* .slice(0,1) */}
         </div>
       </div>
     </div>

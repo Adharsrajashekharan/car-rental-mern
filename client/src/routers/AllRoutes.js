@@ -51,15 +51,15 @@ const AllRoutes = () => {
       <Route
         path="/"
         element={
-          localStorage.getItem("token") ? (
-            <Protected>
+          // localStorage.getItem("token") ? (
+          //   <Protected>
               <Home />
-            </Protected>
-          ) : (
-            <Public>
-              <Home />
-            </Public>
-          )
+          //   </Protected>
+          // ) : (
+          //   <Public>
+          //     <Home />
+          //   </Public>
+          // )
         }
       />
 
@@ -68,7 +68,7 @@ const AllRoutes = () => {
         element={
           <Public>
             <Login />
-          </Public>
+         </Public>
         }
       />
 
@@ -77,7 +77,7 @@ const AllRoutes = () => {
         element={
           <Public>
             <Register />
-          </Public>
+         </Public>
         }
       />
 
@@ -97,7 +97,7 @@ const AllRoutes = () => {
         element={
           <Protected>
             <CarDetails />
-          </Protected>
+           </Protected>
         }
       />
 
@@ -105,10 +105,10 @@ const AllRoutes = () => {
       <Route path="/orders" element={<Orders />} />
       <Route path="/userbookings" element={<UserBookings />} />
       <Route path="/profile" element={<UserProfile />} />
-      <Route path="/usa" element={<CarUsa />} />
-      <Route path="/uk" element={<CarUk />} />
-      <Route path="/canada" element={<CarCanada />} />
-      <Route path="/india" element={<CarIndia />} />
+      <Route path="/trivandrum" element={<CarUsa />} />
+      <Route path="/ernakulam" element={<CarUk />} />
+      <Route path="/kozhikode" element={<CarCanada />} />
+      <Route path="/ffgt" element={<CarIndia />} />
 
       {/* <Route
       path="/admin" element={<Navigate to="/admin" exact element={<Alogin />} />}

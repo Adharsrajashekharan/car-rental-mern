@@ -15,25 +15,25 @@ import TopNav from "../../components/AdminComponents/TopNav/TopNav";
 
 const carObj = {
   title: "Total Cars",
-  totalNumber: 750,
+  totalNumber: 12,
   icon: "ri-police-car-line",
 };
 
 const tripObj = {
   title: "Daily Trips",
-  totalNumber: 1697,
+  totalNumber: 16,
   icon: "ri-steering-2-line",
 };
 
 const clientObj = {
   title: "Clients Annually",
-  totalNumber: "85k",
+  totalNumber: "2k",
   icon: "ri-user-line",
 };
 
 const distanceObj = {
   title: "Kilometers Daily",
-  totalNumber: 2167,
+  totalNumber: 216,
   icon: "ri-timer-flash-line",
 };
 

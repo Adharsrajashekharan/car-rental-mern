@@ -20,6 +20,8 @@ const dispatch =useDispatch()
 const [rentPerHour, setrentPerHour] = useState('')
 const [capacity, setcapacity] = useState('')
 const [fuelType, setfuelType] = useState('')
+const [pickType, setPickType] = useState('')
+
 const [place, setPlace] = useState('')
     //categories from the backend
 
@@ -44,7 +46,7 @@ const [place, setPlace] = useState('')
     const submitForm = (e) =>{
       e.preventDefault();
 
-      dispatch(addCar({ name, description, image,rentPerHour,capacity,fuelType,bookedTimeSlots,place }));
+      dispatch(addCar({ name, description, image,rentPerHour,capacity,fuelType,bookedTimeSlots,place,pickType }));
 
       setName('');
       setDescription('');
@@ -55,6 +57,7 @@ const [place, setPlace] = useState('')
       setfuelType('')
       setbookedTimeSlots('')
       setPlace('')
+      setPickType('')
       toast.success('product created successfully');
   }
   
@@ -98,6 +101,12 @@ const [place, setPlace] = useState('')
             <div className="form-outline mb-4">
                 <input  onChange={(e)=>setfuelType(e.target.value)}  type="text" id="form4Example4" className="form-control"   value={fuelType}/>
                 <label className="form-label" htmlFor="form4Example2">fuelType </label>
+            </div>
+
+
+            <div className="form-outline mb-4">
+                <input  onChange={(e)=>setPickType(e.target.value)}  type="text" id="form4Example4" className="form-control"   value={pickType}/>
+                <label className="form-label" htmlFor="form4Example2">Pickup Location </label>
             </div>
 
             <div className="form-outline mb-4">

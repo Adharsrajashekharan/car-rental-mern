@@ -27,10 +27,10 @@ const navLinks = [
   //   display: "Message",
   // },
 
-  {
-    path: "/blogs",
-    display: "Blog",
-  },
+  // {
+  //   path: "/blogs",
+  //   display: "Blog",
+  // },
   {
     path: "/contact",
     display: "Contact",
@@ -44,7 +44,7 @@ const { Option } = Select;
 const Header = () => {
   const navigate = useNavigate();
   const { name } = useParams();
-  const [selectedCountry, setSelectedCountry] = useState("choose country");
+  const [selectedCountry, setSelectedCountry] = useState("choose state");
 
   function handleCountryChange(value) {
     console.log("nam",name)
@@ -196,9 +196,9 @@ Bookings
           <h6 className="location-selector__subtitle">
             <span className="location-selector__dropdown">
             <Select value={selectedCountry} onChange={handleCountryChange}>
-      <Option value="USA">USA</Option>
-      <Option value="UK">UK</Option>
-      <Option value="Canada">Canada</Option>
+      <Option value="trivandrum">Trivandrum</Option>
+      <Option value="ernakulam">Ernakulam</Option>
+      <Option value="kozhikode">Kozhikode</Option>
     </Select>
             </span>
           </h6>

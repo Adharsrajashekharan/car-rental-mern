@@ -1,16 +1,18 @@
 const express = require("express");
-const { addCar, block, editCar, deleteCar, unblock ,adminLogin,bookedcars} = require("../controllers/adminCtrl");
+const { addCar, block, editCar, deleteCar, unblock ,adminLogin,bookedcars, reservedCars} = require("../controllers/adminCtrl");
+const authMiddleware = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.post('/login',adminLogin)
-router.post("/add-car", addCar);
-router.post("/editcar",editCar)
+router.post("/add-car",authMiddleware, addCar);
+router.post("/editcar",authMiddleware,editCar)
 
 router.post("/block",block)
 router.post('/unblock',unblock)
-router.post("/deletecar",deleteCar)
-router.get('/bookedcars',bookedcars)
+router.post("/deletecar",authMiddleware,deleteCar)
+router.get('/bookedcars',authMiddleware,bookedcars)
 
+router.get('/reservedcars',authMiddleware,reservedCars)
 
 
 

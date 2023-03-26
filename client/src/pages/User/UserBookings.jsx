@@ -12,7 +12,7 @@ import {useNavigate} from 'react-router-dom'
 
 const UserBookings = () => {
   const [showPopup, setShowPopup] = useState(false);
-
+const [bookingid, setbookingid] = useState('')
   const handleCancelBooking = (bookingId) => {
     dispatch(cancelCarBooking(bookingId));
     setcancelcar([...cancelcar,bookingId])  
@@ -37,7 +37,10 @@ const user = JSON.parse(localStorage.getItem("User"));
     }, [])
     
 
-
+const cancelConfirmation=(id)=>{
+  setbookingid(id)
+  setShowPopup(true)
+}
 // const handleCancelBooking = (bookingId) => {
 //     dispatch(cancelCarBooking(bookingId));
 //      setcancelcar([...cancelcar,bookingId])
@@ -75,6 +78,12 @@ const user = JSON.parse(localStorage.getItem("User"));
                     </p>
                     <p>
                       Total amount : <b>{booking.totalAmount}</b>
+                    </p>
+                    <p>
+                    Pickup location: <b>{booking?.pickupAddress?booking.pickupAddress:
+                    
+                    booking.place
+                    }</b>
                     </p>
                   </Col>
 
@@ -114,12 +123,12 @@ const user = JSON.parse(localStorage.getItem("User"));
                     </button> */}
 
 <button
-        onClick={() => setShowPopup(true)}
+        onClick={() => cancelConfirmation(booking._id)}
         className="btn btn-danger mt-3"
       >
         Cancel Booking
       </button>
-      {showPopup && (
+      {showPopup && bookingid==booking._id && (
         <div className="popup">
           <div className="popup-content">
             <p>Are you sure you want to cancel this booking?</p>

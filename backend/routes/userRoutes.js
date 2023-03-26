@@ -19,29 +19,43 @@ const upload = multer({ storage });
 
 
 const {
-  loginController,
-  registerController,
-  forgotPasswordController,
+  
   getallusers,
   getallcars,
-  bookCar,
-  verifyOTPController,
   RazorPay,
   RazorSucess,
-  bookcaroffline,
   getAllOrders,
   payment,
   getAllBookings,
   authController,
-  cancelcarbooking,
   userProfile,
   getUserInfo,
   
   updateDocuments,
   findcarusa,
   findcaruk,
-  findcarcanada
+  findcarcanada,
 } = require("../controllers/userCtrl");
+
+const{
+bookCar,
+bookcaroffline,
+cancelcarbooking,
+uncancelcarbooking,
+}=require('../controllers/bookingCtrl')
+
+const {
+  registerController,
+  verifyOTPController,
+  loginController,
+  forgotPasswordController
+}=require('../controllers/loginCtrl')
+
+
+
+
+
+
 const authMiddleware = require("../middlewares/authMiddleware");
 const userModel = require("../models/userModels");
 
@@ -63,9 +77,9 @@ router.get("/getallcars",getallcars)
 
 router.post("/getuserdata",authMiddleware,authController)
 
-router.post("/bookcar",bookCar)
+router.post("/bookcar",authMiddleware,bookCar)
 
-router.post("/bookcaroffline",bookcaroffline)
+router.post("/bookcaroffline",authMiddleware,bookcaroffline)
 
 
 router.get("/orders",authMiddleware,getAllOrders) 
@@ -82,25 +96,26 @@ router.get("/getallbookings",authMiddleware,getAllBookings)
 
 router.post("/verify-otp",verifyOTPController)
 
-router.post("/payment", payment)
+// router.post("/payment", payment)
 
 // router.post("/orders",RazorPay)
 
 // router.post("/success",RazorSucess )
 
-router.post("/cancelcarbooking", cancelcarbooking)
+router.post("/cancelcarbooking",authMiddleware, cancelcarbooking)
+router.post("/uncancelcarbooking",authMiddleware, uncancelcarbooking)
 
-router.get("/profile", userProfile)
-
-
-router.post('/update',updateDocuments)
+// router.get("/profile", userProfile)
 
 
-router.get('/usa',authMiddleware,findcarusa)
+// router.post('/update',updateDocuments)
 
-router.get('/uk',authMiddleware,findcaruk)
 
-router.get('/canada',authMiddleware,findcarcanada)
+router.get('/trivandrum',findcarusa)
+
+router.get('/ernakulam',findcaruk)
+
+router.get('/kozhikode',findcarcanada)
 
 
 
@@ -125,19 +140,38 @@ router.get('/canada',authMiddleware,findcarcanada)
 
 
 // Update user profile
-router.put('/me',  upload.single('avatar'), async (req, res) => {
+router.post('/profile', async (req, res) => {
   try {
-  
-    const user = await userModel.findById(req.body._id);
+    console.log("first",req.body.Useru)
+    const id=req.body.Useru
+    console.log(id)
+    const user = await userModel.findById(id)
+    console.log("1234",user)
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+router.put('/profile', async (req, res) => {
+  try {
+    console.log("firstcall")
+    console.log("secondcall",req.body.User._id)
+    const userId=req.body.User._id
+    const { name, email, bio,URLS } = req.body;
+    console.log("pro",req.body)
+    const user = await userModel.findById(userId);
+
     if (!user) {
       return res.status(404).json({ msg: 'User not found' });
     }
 
-    const { name, email, bio } = req.body;
-
     user.name = name || user.name;
     user.email = email || user.email;
     user.bio = bio || user.bio;
+    user.URLS=URLS
+
     if (req.file) {
       user.avatar = `/uploads/${req.file.filename}`;
     }
@@ -150,6 +184,5 @@ router.put('/me',  upload.single('avatar'), async (req, res) => {
     res.status(500).send('Server error');
   }
 });
-
 
 module.exports = router;

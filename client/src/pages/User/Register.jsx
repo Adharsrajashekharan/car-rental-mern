@@ -104,6 +104,7 @@ const Register = () => {
     const onfinishHandler = async (values) => {
       try {
         const res = await config.post("/api/v1/user/register", values);
+        console.log("THIS is value",values)
         if (res.data.success) {
           // message.success("Register Successfully!");
           console.log(values);
@@ -210,8 +211,8 @@ const Register = () => {
               <Button style={{width:'10rem',align:'center'}} type="primary" htmlType="submit" className={styles.btn}>
               Sign Up              
               </Button>
-              <p className={styles.text}>or</p>
-              <Google />
+              <p className={styles.text}></p>
+              {/* <Google /> */}
               <p  className={styles.text}>
                 Already user ? <Link style={{textDecoration:'none'}} to="/login">Sign Up</Link>
               </p>

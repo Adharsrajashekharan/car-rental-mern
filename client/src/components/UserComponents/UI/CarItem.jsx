@@ -17,80 +17,118 @@ const CarItem = (props) => {
 
  
 
-  function setFilter(values) {
-    var selectedFrom = values[0].format("MMM DD YYYY HH:mm");
-    var selectedTo = values[1].format("MMM DD YYYY HH:mm");
-    console.log(selectedFrom, selectedTo);
-    var temp = [];
-  
-    for (var car of cars) {
-      if (car.bookedTimeSlots.length == 0) {
-        temp.push(car);
-      } else {
-        for (var booking of car.bookedTimeSlots) {
-          var bookingFrom = new Date(booking.from);
-          var bookingTo = new Date(booking.to);
-  
-          if (
-            (new Date(selectedFrom) >= bookingFrom && new Date(selectedFrom) <= bookingTo) ||
-            (new Date(selectedTo) >= bookingFrom && new Date(selectedTo) <= bookingTo) ||
-            (bookingFrom >= new Date(selectedFrom) && bookingFrom <= new Date(selectedTo)) ||
-            (bookingTo >= new Date(selectedFrom) && bookingTo <= new Date(selectedTo))
-          ) {
-            // do nothing
-          } else {
-            temp.push(car);
-          }
-        }
-      }
-    }
-  
-    settotalcars(temp);
+
+  function disabledDate(current) {
+    // can't select days before today
+    return current && current < new Date(Date.now() - 86400000); // 86400000 is the number of milliseconds in a day
   }
+
+
+//   function setFilter(values) {
+//     var selectedFrom = values[0].format("MMM DD YYYY HH:mm");
+//     var selectedTo = values[1].format("MMM DD YYYY HH:mm");
+//     console.log(selectedFrom, selectedTo);
+//     var temp = [];
   
-
-
-  
-  //   const fromDate = moment(values[0], "MMM DD YYYY HH:mm");
-      // function setFilter(values) {
-    // console.log(values);
-    // console.log(values[0].format("MMM DD YYYY HH:mm"));
-    // console.log(values[1].format("MMM DD YYYY HH:mm"));
-    // setFrom(values[0].format("MMM DD YYYY HH:mm"));
-    // setTo(values[1].format("MMM DD YYYY HH:mm"));
-    // setTotalHours(values[1].diff(values[0], "hours"));
-//   const toDate = moment(values[1], "MMM DD YYYY HH:mm");
-//   console.log("fdf444", fromDate, toDate);
-
-//   const temp = [];
-
-//   for (let car of totalcars) {
-//     if (car.bookedTimeSlots.length === 0) {
-//       temp.push(car);
-//     } else {
-//       let isAvailable = true;
-//       for (let booking of car.bookedTimeSlots) {
-//         if (
-//           fromDate.isBetween(booking.from, booking.to) ||
-//           toDate.isBetween(booking.from, booking.to) ||
-//           moment(booking.from).isBetween(fromDate, toDate) ||
-//           moment(booking.to).isBetween(fromDate, toDate)
-//         ) {
-//           isAvailable = false;
-//           break;
-//         }
-//       }
-//       if (isAvailable) {
+//     for (var car of cars) {
+//       if (car.bookedTimeSlots.length == 0) {
 //         temp.push(car);
+//       } else {
+//         // for (var booking of car.bookedTimeSlots) {
+//           // console.log("first",typeof(booking))
+//           car.bookedTimeSlots.forEach(element => {
+
+//          var bookingFrom = new Date(element.from);
+//           var bookingTo = new Date(element.to);
+//           console.log("object1111",bookingFrom)
+//           console.log("object2222",bookingTo)
+
+//           if (
+//             (new Date(selectedFrom) >= bookingFrom && new Date(selectedFrom) <= bookingTo) ||
+//             (new Date(selectedTo) >= bookingFrom && new Date(selectedTo) <= bookingTo) ||
+//             (bookingFrom >= new Date(selectedFrom) && bookingFrom <= new Date(selectedTo)) ||
+//             (bookingTo >= new Date(selectedFrom) && bookingTo <= new Date(selectedTo))
+//           ) {
+//             // do nothing
+//           } else {
+//             temp.forEach(el=>{
+//               if(el._id != car._id){
+//                 temp.push(car);
+//               }else{
+//                 return ;
+
+//               }
+//             })
+            
+//           }
+//  });
+//           // var bookingFrom = new Date(booking.from);
+//           // var bookingTo = new Date(booking.to);
+  
+//           // if (
+//           //   (new Date(selectedFrom) >= bookingFrom && new Date(selectedFrom) <= bookingTo) ||
+//           //   (new Date(selectedTo) >= bookingFrom && new Date(selectedTo) <= bookingTo) ||
+//           //   (bookingFrom >= new Date(selectedFrom) && bookingFrom <= new Date(selectedTo)) ||
+//           //   (bookingTo >= new Date(selectedFrom) && bookingTo <= new Date(selectedTo))
+//           // ) {
+//           //   // do nothing
+//           // } else {
+//           //   temp.push(car);
+//           // }
+//         // }
 //       }
 //     }
+  
+//     settotalcars(temp);
 //   }
-//   settotalcars(temp);
-// }
+  
+
+
+  
+   
+
+
+
+function setFilter(values) {
+  var selectedFrom = values[0].format("MMM DD YYYY HH:mm");
+  var selectedTo = values[1].format("MMM DD YYYY HH:mm");
+  console.log(selectedFrom, selectedTo);
+  var temp = [];
+
+  for (var car of cars) {
+    var hasOverlap = false;
+    for (var booking of car.bookedTimeSlots) {
+      var bookingFrom = new Date(booking.from);
+      var bookingTo = new Date(booking.to);
+
+      if (
+        (new Date(selectedFrom) >= bookingFrom && new Date(selectedFrom) <= bookingTo) ||
+        (new Date(selectedTo) >= bookingFrom && new Date(selectedTo) <= bookingTo) ||
+        (bookingFrom >= new Date(selectedFrom) && bookingFrom <= new Date(selectedTo)) ||
+        (bookingTo >= new Date(selectedFrom) && bookingTo <= new Date(selectedTo))
+      ) {
+        hasOverlap = true;
+        break; // exit the loop early if there is an overlap
+      }
+    }
+    if (!hasOverlap) {
+      temp.push(car);
+    }
+  }
+
+  settotalcars(temp);
+}
+
+
+
+
+
+
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getallcars());
+    console.log("this is total cars",totalcars)
   }, []);
 
   useEffect(() => {
@@ -116,11 +154,12 @@ const CarItem = (props) => {
             format="MMM DD YYYY HH:mm"
             style={{ height: 2, width: 200, padding: 20 }}
             onChange={setFilter}
+            disabledDate={disabledDate}
           />
         </Col>
       </Row>
-      {loading == true && <Spinner />}
-      {totalcars.map((cars) => {
+      {/* {loading == true && <Spinner />} */}
+      {totalcars?.map((cars) => {
         return (
           <Col lg="4" md="4" sm="6" className="mb-5">
             <div className="car__item">

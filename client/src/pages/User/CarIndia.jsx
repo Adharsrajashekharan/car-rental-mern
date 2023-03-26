@@ -12,7 +12,7 @@ const CarIndia = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await config.get("/api/v1/user/india");
+        const response = await config.get("/api/v1/user/");
         const bookingCars = response.data;
         setBookings(bookingCars);
       } catch (error) {

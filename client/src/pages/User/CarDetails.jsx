@@ -33,6 +33,8 @@ const CarDetails = () => {
   const [driver, setDriver] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [dateRange, setDateRange] = useState([]);
+  const [pickupAddress, setPickupAddress] = useState('');
+
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -62,40 +64,105 @@ const CarDetails = () => {
     setDateRange(values);
 
   }
-  function bookNow() {
+  // function bookNow() {
+  //   const reqObj = {
+  //     user: JSON.parse(localStorage.getItem("User"))._id,
+  //     car: car._id,
+  //     totalAmount,
+  //     totalHours,
+  //     place:car.pickType,
+  //     pickupAddress,
+  //     driverRequired: driver,
+  //     bookedTimeSlots: {
+  //       from,
+  //       to,
+  //     },
+  //   };
+  //   dispatch(bookCarOffline(reqObj));
+  //   navigate('/userbookings')
+
+  // }
+
+  async function bookNow() {
     const reqObj = {
       user: JSON.parse(localStorage.getItem("User"))._id,
       car: car._id,
       totalAmount,
       totalHours,
+      place:car.pickType,
+      pickupAddress,
       driverRequired: driver,
       bookedTimeSlots: {
         from,
         to,
       },
     };
-    dispatch(bookCarOffline(reqObj));
-    navigate('/userbookings')
-
+  
+    await new Promise((resolve) => {
+      dispatch(bookCarOffline(reqObj));
+      resolve();
+    });
+  
+    setTimeout(() => {
+      navigate('/userbookings');
+    }, 4000);
   }
-  function onToken(token) {
+ 
+  
+  
+  
+  
+  
+  // function onToken(token) {
+  //   const reqObj = {
+  //     token,
+  //     user: JSON.parse(localStorage.getItem("User"))._id,
+  //     car: car._id,
+  //     place:car.pickType,
+  //     totalAmount,
+  //     totalHours,
+  //     pickupAddress,
+  //     driverRequired: driver,
+  //     bookedTimeSlots: {
+  //       from,
+  //       to,
+  //     },
+  //   };
+  //   dispatch(bookCar(reqObj));
+  //   console.log(token);
+  //   navigate('/userbookings')
+
+  // }
+
+  async function onToken(token) {
     const reqObj = {
       token,
       user: JSON.parse(localStorage.getItem("User"))._id,
       car: car._id,
+      place:car.pickType,
       totalAmount,
       totalHours,
+      pickupAddress,
       driverRequired: driver,
       bookedTimeSlots: {
         from,
         to,
       },
     };
-    dispatch(bookCar(reqObj));
+  
+    await new Promise((resolve) => {
+      dispatch(bookCar(reqObj));
+      resolve();
+    });
+  
     console.log(token);
-    navigate('/userbookings')
-
+  
+    setTimeout(() => {
+      navigate('/userbookings');
+    }, 4000);
   }
+  
+
 
   function handleReserveNowClick() {
     const selectedPaymentMethod = document.querySelector('input[type="radio"]:checked');
@@ -247,17 +314,51 @@ const CarDetails = () => {
                 <h5 className="mb-4 fw-bold ">Booking Information</h5>
                 <h5 className="mb-4 p-3 fw-bold ">Select-time slots</h5>
                 
-                <RangePicker
+                {/* <RangePicker
                   style={rangePickerStyle}
                   className="ml-3 mx-4 mb-4 p-5 fw-bold"
                   showTime={{ format: "HH:mm" }}
                   format="MMM DD YYYY HH:mm"
                   onChange={selectTimeSlots}
                   disabledDate={disabledDate} // add disabledDate prop
+                   
+                 /> */}
+          <RangePicker
+  style={rangePickerStyle}
+  className="ml-3 mx-4 mb-4 p-5 fw-bold"
+  showTime={{ format: "HH:mm" }}
+  format="MMM DD YYYY HH:mm"
+  onChange={selectTimeSlots}
 
-                 />
+  disabledDate={date => {
+    // Get the current date and set hours to 0 to compare with the selected date
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+  
+    // Check if the selected date is before the current date
+    if (date < currentDate) {
+      return true;
+    }
+  
+    // Loop through the booked time slots
+    for (let i = 0; i < car.bookedTimeSlots.length; i++) {
+      const from = new Date(car.bookedTimeSlots[i].from).setHours(0, 0, 0, 0);
+      const to = new Date(car.bookedTimeSlots[i].to).setHours(0, 0, 0, 0);
+  
+      // Check if the current date falls within a booked time slot
+      if (date >= from && date <= to) {
+        return true;
+      }
+    }
+  
+    // If the current date does not fall within a booked time slot and is not before the current date, allow selection
+    return false;
+  }}
+/>
+
+
                 <h5 className=" p-3 fw-bold ">Total hours:{totalHours}</h5>
-                <Checkbox
+                {/* <Checkbox
                   className="p-3 fw-bold"
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -268,8 +369,34 @@ const CarDetails = () => {
                   }}
                 >
                   Driver Required
-                </Checkbox>
+                </Checkbox> */}
 
+        <Checkbox 
+          checked={driver}
+          className="p-3 fw-bold"
+          onChange={(e) => {
+            if (e.target.checked) {
+              setDriver(true);
+            } else {
+              setDriver(false);
+            }
+          }}
+        >
+          Driver Required
+     </Checkbox>
+
+      {driver && (
+        <div>
+          <label>
+            Pickup Address:
+            <input 
+              type="text"
+              value={pickupAddress}
+              onChange={(e) => setPickupAddress(e.target.value)}
+            />
+          </label>
+        </div>
+      )}
 
 
                 {/* <BookingForm /> */}

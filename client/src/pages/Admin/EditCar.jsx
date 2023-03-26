@@ -65,7 +65,7 @@ return (
     <>
 
     {/* {loading && <Spinner />} */}
-      <div className="form-container register">
+      <div className="register">
      {totalcars.length>0 &&(<Form
         layout="vertical"
         initialValues={car}
@@ -121,8 +121,9 @@ return (
 </div>
 </>    </>
 
+);
   
-  )
+  
 }
 
 export default EditCar
