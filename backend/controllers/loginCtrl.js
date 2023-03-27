@@ -138,6 +138,12 @@ const registerController = async (req, res) => {
       await user.save();
       res.status(200).send({ message: 'OTP verified successfully', success: true });
       }
+
+      if (otp !== orginalotp.toString()) {
+        return res.status(404).send({ success: false, message: 'Otp entered is invalid' });
+
+      }
+
     } catch (error) {
       console.log(error);
       res.status(500).send({ success: false, message: `Verify OTP Controller ${error.message}` });
