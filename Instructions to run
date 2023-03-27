@@ -1,0 +1,35 @@
+There are two folders in this Car rental mern project that is cliend and Backend
+To run these you need to install npm i by entering both the folders in your cloned project
+Then  you need is the .env so create a .env file in Backend and enter the following
+
+PORT=8080
+MONGO_URL='YOUR URL OVER HERE'
+JWT_SECRET =XYZ123XX
+EMAIL='adarshrajashekhar@gmail.com'
+PASSWORD=vpoidooxaxfwyvzc
+CLIENT_ID ="281036244184-cjom5kg4jls69n5vpqpmmvqg6dhipf18.apps.googleusercontent.com"
+CLIENT_SECRET="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"
+NODE_MODE="GOD"
+FAST2SMS_API_KEY='YOUR FAST TWO SMS API'
+REACT_APP_BE_URL="http://localhost:8080"
+
+After creating .env you need to run the Backend as well as the client inorder to make the project work
+
+To run the client enter cd client to get inside client folder and enter npm start
+
+To run the backend enter cd backend to get inside backend folder and enter node start server OR node start
+
+Protected routes are setup in admin so login using the following username and password to view admin routes 
+
+username :adarshrajashekhar@gmail.com
+password:123
+
+then after loging in on route enter /admin
+
+and an admin login page will be visible enter the following there
+
+username:adarshrajashekhar@gmai.com
+Password:q
+
+
+#Happy_coding
